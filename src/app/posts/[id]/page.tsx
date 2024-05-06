@@ -1,9 +1,9 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "next/navigation";
 import { Post } from "@/interface";
 
-export const Article: React.FC<{ id: number, title: string, thumbnail: string, createdAt: string, categories: string, content: string }> = () => {
+export default function Posts() {
   const [post, setPosts] = useState<Post | null>(null);
   const { id } = useParams<{ id: string }>();
   const [isLoading, setIsLoading] = useState(false);

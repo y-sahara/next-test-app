@@ -33,7 +33,7 @@ export const Lists = () => {
       {posts ? posts.map((post) => (
         <div key={post.id} className="postIds">
           <Link
-            href={`/article/${post.id}`}
+            href={`/posts/${post.id}`}
             style={{ textDecoration: "none", color: "inherit" }}
           >
             <div className="postHead">
