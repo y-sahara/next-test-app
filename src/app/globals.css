@@ -16,18 +16,152 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 30px;
+  align-items: center;
+  background-color: #333333;
+  color: white;
+  height: 100px;
+}
+
+.siteName {
+  font-size: 30px;
+}
+
+.toSupportPage {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+
+/* header */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 30px;
+  align-items: center;
+  background-color: #333333;
+  color: white;
+  height: 100px;
+}
+
+.siteName {
+  font-size: 30px;
+}
+
+.toSupportPage {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Postcontents */
+
+.postIds {
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 100 100;
+  margin-top: 20px;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 1rem;
+}
+
+.postId {
+  padding: 100 100;
+  margin-top: 20px;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 1rem;
+}
+
+.postHead {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0px;
+  /* padding: 0 20px; */
+}
+
+.postCreatedAt {
+  margin-left: 10px;
+}
+
+.postCategories {
+  display: flex;
+}
+
+.postCategory {
+  margin-left: 10px;
+  border: 1px solid;
+  border-radius: 3px;
+  color: #0065CC;
+  padding: 5px;
+}
+
+.postTitle {
+  font-size: 25px;
+  margin-left: 10px;
+}
+
+.postContent {
+  margin: 15px 0px;
+  padding-right: 20%;
+  overflow: hidden;
+  max-height: 2.4em;
+  line-height: 1.2em;
+}
+
+.error-message {
+  color: #B91C1C;
+  text-align: right;
+  /* 右端揃え */
+  margin-top: 5px;
+  /* 適切なマージンを追加 */
+}
+
+/* 入力フィールドの幅を自動調整 */
+input[type="text"],
+input[type="email"],
+textarea {
+  width: 60%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+
+/* ボタンのスタイル */
+button.submit {
+  padding: 10px 20px;
+  margin-top: 10px;
+  background-color: #333333;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.clear {
+  padding: 10px 20px;
+  margin-top: 10px;
+  background-color: #E5E7EB;
+  color: black;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.submit:disabled,
+button.clear:disabled {
+  cursor: not-allowed;
 }
