@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { MicroCmsPost, Post } from "@/app/_types/interface";
+import Image from "next/image";
 
 export default function Posts() {
   const [post, setPosts] = useState<MicroCmsPost | null>(null);
@@ -38,7 +39,13 @@ export default function Posts() {
 
   return (
     <div key={post.id} className="postId">
-      <img src={post.thumbnail.url} alt="Post thumbnail" />
+      <Image
+        height={190}
+        width={1200}
+        src={post.thumbnail.url}
+        alt=""
+        className=""
+      />
 
       <div className="postHead">
         <div className="postCreatedAt">
