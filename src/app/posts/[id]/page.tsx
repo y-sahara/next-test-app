@@ -1,10 +1,10 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Post } from "@/app/_types/interface";
+import { MicroCmsPost, Post } from "@/app/_types/interface";
 
 export default function Posts() {
-  const [post, setPosts] = useState<Post | null>(null);
+  const [post, setPosts] = useState<MicroCmsPost | null>(null);
   const { id } = useParams<{ id: string }>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -12,10 +12,15 @@ export default function Posts() {
     setIsLoading(true);
     const fetcher = async () => {
       const res = await fetch(
-        `https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts/${id}`
-      );
-      const { post } = await res.json();
-      setPosts(post);
+        `https://f11kzf9pqd.microcms.io/api/v1/posts/${id}`,// microCMSのエンドポイント
+        {
+          headers: {
+            'X-MICROCMS-API-KEY': process.env.NEXT_PUBLIC_MICROCMS_API_KEY as string, // APIキーをセット
+          },
+        },
+      )
+      const data = await res.json();
+      setPosts(data);
       setIsLoading(false);
     };
     fetcher();
@@ -33,7 +38,7 @@ export default function Posts() {
 
   return (
     <div key={post.id} className="postId">
-      <img src={post.thumbnailUrl} alt="Post thumbnail" />
+      <img src={post.thumbnail.url} alt="Post thumbnail" />
 
       <div className="postHead">
         <div className="postCreatedAt">
@@ -42,13 +47,13 @@ export default function Posts() {
         <div className="postCategories">
           {post.categories.map((category, index) => (
             <div key={index} className="postCategory">
-              {category}
+              {category.name}
             </div>
           ))}
         </div>
       </div>
       <div className="postTitle">{post.title}</div>
-      <div className="post">{post.content}</div>
-    </div>
+      <div className="post" dangerouslySetInnerHTML={{ __html: post.content }}></div>
+    </div >
   );
 };
