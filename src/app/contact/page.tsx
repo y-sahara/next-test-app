@@ -1,7 +1,7 @@
 'use client'
 import react, { useState } from "react";
-import { formData } from '@/interface';
-import { ErrorMessages } from "@/interface";
+import { formData } from '@/app/_types/interface';
+import { ErrorMessages } from "@/app/_types/interface";
 
 export default function Contact() {
   const [formData, setFormData] = useState<formData | null>({

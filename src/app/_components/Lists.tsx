@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Post } from "../interface";
+import { Post } from "../_types/interface";
 
 export const Lists = () => {
   const [posts, setPosts] = useState<Post[] | null>(null);
