@@ -1,29 +1,34 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { MicroCmsPost, Post } from "@/app/_types/interface";
+import { Category } from "@/types/Category";
+import { Post } from "@/types/post";
 import Image from "next/image";
 
 export default function Posts() {
-  const [post, setPosts] = useState<MicroCmsPost | null>(null);
+  const [post, setPosts] = useState<Post | null>(null);
+  const [error, setError] = useState(null)
   const { id } = useParams<{ id: string }>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    setIsLoading(true);
     const fetcher = async () => {
-      const res = await fetch(
-        `https://f11kzf9pqd.microcms.io/api/v1/posts/${id}`,// microCMSのエンドポイント
-        {
-          headers: {
-            'X-MICROCMS-API-KEY': process.env.NEXT_PUBLIC_MICROCMS_API_KEY as string, // APIキーをセット
-          },
-        },
-      )
-      const data = await res.json();
-      setPosts(data);
-      setIsLoading(false);
-    };
+      setLoading(true)
+      try {
+        const res = await fetch('/api/admin/posts/${id}')
+        if (!res.ok) {
+          throw new Error('Failed to fetch posts')
+        }
+        const { posts } = await res.json()
+        setPosts(posts)
+        // setPosts(posts.find((p: Post) => p.id.toString() === id) || null);
+      } catch (error: any) {
+        setError(error.massage)
+      } finally {
+        setLoading(false)
+      }
+    }
     fetcher();
   }, [id]);
 
@@ -42,7 +47,7 @@ export default function Posts() {
       <Image
         height={190}
         width={1200}
-        src={post.thumbnail.url}
+        src={post.thumbnailUrl}
         alt=""
         className=""
       />
@@ -52,15 +57,17 @@ export default function Posts() {
           {new Date(post.createdAt).toLocaleDateString("ja-JP")}
         </div>
         <div className="postCategories">
-          {post.categories.map((category, index) => (
-            <div key={index} className="postCategory">
-              {category.name}
-            </div>
-          ))}
+          {Array.isArray(post.postCategories)
+            ? post.postCategories.map((category, index) => (
+              <div key={'${category.category.id} ||index}'} className="postCategory">
+                {category.category.name}
+              </div>
+            ))
+            : null}
         </div>
       </div>
       <div className="postTitle">{post.title}</div>
       <div className="post" dangerouslySetInnerHTML={{ __html: post.content }}></div>
     </div >
   );
-};
+}

@@ -2,16 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { MicroCmsPost, Post } from "../_types/interface";
+import { MicroCmsPost, Post } from "../../types/post";
 
 export const Lists = () => {
   const [posts, setPosts] = useState<MicroCmsPost[] | null>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+
     setIsLoading(true);
     const fetcher = async () => {
-      const res = await fetch('https://f11kzf9pqd.microcms.io/api/v1/posts', {// 管理画面で取得したエンドポイントを入力してください。
+      const res = await fetch('api/posts', {// 管理画面で取得したエンドポイントを入力してください。
         headers: {// fetch関数の第二引数にheadersを設定でき、その中にAPIキーを設定します。
           'X-MICROCMS-API-KEY': process.env.NEXT_PUBLIC_MICROCMS_API_KEY as string, // 管理画面で取得したAPIキーを入力してください。
         },

@@ -1,9 +1,11 @@
+import { Category } from "./Category";
+
 export interface Post {
   id: number;
   title: string;
   thumbnailUrl: string;
   createdAt: string;
-  categories: string[];
+  postCategories: { category: Category }[] | '';
   content: string;
 }
 
