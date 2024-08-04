@@ -9,7 +9,7 @@ export const GET = async (request: NextRequest, { params }: { params: { id: stri
   const { id } = params
   try {
     // Postの一覧をDBから取得
-    const posts = await prisma.post.findUnique({
+    const post = await prisma.post.findUnique({
       where: {
         id: parseInt(id),
       },
@@ -28,7 +28,7 @@ export const GET = async (request: NextRequest, { params }: { params: { id: stri
         },
       },
     })
-    return NextResponse.json({ status: 'OK', posts: posts }, { status: 200 })
+    return NextResponse.json({ status: 'OK', post }, { status: 200 })
 
   } catch (error) {
     if (error instanceof Error) {

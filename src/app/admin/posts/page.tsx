@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { Post } from "@/types/post";
 import Link from "next/link";
@@ -28,8 +29,11 @@ export default function Page() {
     fetcher();
   }, []);
 
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+  if (!posts) return <div>記事が見つかりません</div>;
+  
   return (
     <div className="">
       <div className="flex justify-between items-center mb-8">
@@ -42,7 +46,7 @@ export default function Page() {
       <div className="">
         {posts.map((post) => (
           <Link href={`/admin/posts/${post.id}`} key={post.id}>
-            <div className="p-4 border rounded hover:bg-gray-100">
+            <div className="p-4 border rounded hover:bg-blue-100">
               <div className="text-black text-xl font-bold">{post.title}</div>
               <div className="text-gray-500">
                 {new Date(post.createdAt).toLocaleDateString()}

@@ -38,18 +38,9 @@ export default function Page() {
       const { category } = await res.json();
       setName(category.name);
     };
-    // } catch (error) {
-    //   console.error("Error fetching category:", error);
-    // } finally {
-    //   setIsLoading(false);
-    // }
 
     fetcher();
   }, [id]);
-
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
 
   return (
     <div className="container mx-auto px-4">

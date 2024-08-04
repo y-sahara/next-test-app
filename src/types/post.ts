@@ -5,7 +5,7 @@ export interface Post {
   title: string;
   thumbnailUrl: string;
   createdAt: string;
-  postCategories: { category: Category }[] | '';
+  postCategories: {category:Category[]} | '';
   content: string;
 }
 

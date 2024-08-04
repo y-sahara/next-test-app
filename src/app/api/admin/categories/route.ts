@@ -5,14 +5,11 @@ const prisma = new PrismaClient()
 
 export const GET = async (request: NextRequest) => {
   try {
-    // categoryの一覧をDBから取得
     const categories = await prisma.category.findMany({
-      //作成日時の降順で取得
       orderBy: {
         createdAt: 'desc',
       },
     })
-    //レスポンスを返す
     return NextResponse.json({ status: 'OK', categories }, { status: 200 })
 
   } catch (error) {
@@ -24,7 +21,6 @@ export const GET = async (request: NextRequest) => {
 
 export const POST = async (request: Request, context: any) => {
   try {
-    //リクエストのbodyを取得
     const body = await request.json()
 
     const { name } = body;

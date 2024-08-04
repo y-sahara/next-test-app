@@ -26,7 +26,7 @@ export const GET = async (request: NextRequest) => {
         createdAt: 'desc',
       },
     })
-    return NextResponse.json({ status: 'OK', posts: posts }, { status: 200 })
+    return NextResponse.json({ status: 'OK', posts }, { status: 200 })
     console.log(posts)
 
   } catch (error) {

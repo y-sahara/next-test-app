@@ -10,15 +10,13 @@ export default function Page() {
   const [content, setContent] = useState('')
   const [thumbnailUrl, setThumbnailUrl] = useState(
     'https://placehold.jp/800x400.png',
-  ) // 画像URLは、一旦このURL固定でお願いします。後ほど画像アップロード処理を実装します。
+  ) 
   const [categories, setCategories] = useState<Category[]>([])
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
-    // フォームのデフォルトの動作をキャンセルします。
     e.preventDefault()
 
-    // 記事を作成します。
     const res = await fetch('/api/admin/posts', {
       method: 'POST',
       headers: {
@@ -27,7 +25,6 @@ export default function Page() {
       body: JSON.stringify({ title, content, thumbnailUrl, categories }),
     })
 
-    // レスポンスから作成した記事のIDを取得します。
     const { id } = await res.json()
 
     // 作成した記事の詳細ページに遷移します。

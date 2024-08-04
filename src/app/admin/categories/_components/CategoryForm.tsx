@@ -16,6 +16,7 @@ export const CategoryForm: React.FC<Props> = ({
   onDelete,
 }) => {
   return (
+    <div className="max-w-md mx-auto"> 
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
         <label
@@ -48,5 +49,6 @@ export const CategoryForm: React.FC<Props> = ({
         </button>
       )}
     </form>
+    </div>
   );
 };

@@ -45,7 +45,7 @@ export default function Page() {
           return (
             <Link href={`/admin/categories/${category.id}`} key={category.id}>
               <div className="border-b border-gray-300 p-4 hover:bg-gray-100 cursor-pointer">
-                <div className="text-xl font-bold">{category.name}</div>
+                <div className="text-xl ">{category.name}</div>
               </div>
             </Link>
           );
