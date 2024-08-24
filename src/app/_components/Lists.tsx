@@ -1,61 +1,73 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { MicroCmsPost, Post } from "../_types/interface";
+import { Post } from "@/types/post";
+import { Category } from "@/types/Category";
 
 export const Lists = () => {
-  const [posts, setPosts] = useState<MicroCmsPost[] | null>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setIsLoading(true);
     const fetcher = async () => {
-      const res = await fetch('https://f11kzf9pqd.microcms.io/api/v1/posts', {// 管理画面で取得したエンドポイントを入力してください。
-        headers: {// fetch関数の第二引数にheadersを設定でき、その中にAPIキーを設定します。
-          'X-MICROCMS-API-KEY': process.env.NEXT_PUBLIC_MICROCMS_API_KEY as string, // 管理画面で取得したAPIキーを入力してください。
-        },
-      })
-      const { contents } = await res.json();
-      setPosts(contents);
-      setIsLoading(false)
+      try {
+        const res = await fetch("/api/posts");
+        if (!res.ok) {
+          throw new Error("Failed to fetch posts");
+        }
+        const { posts } = await res.json();
+
+        setPosts(posts);
+
+      } catch (error: any) {
+        setError(error.massage);
+      } finally {
+        setLoading(false);
+      }
     };
+
     fetcher();
   }, []);
 
-  if (isLoading) {
-    return (
-      <div>読み込み中</div>
-    )
-  }
-
+  if (loading) return <div>読み込み中</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!posts) return <div>記事が見つかりません</div>;
 
   return (
     <div className="posts">
-      {posts ? posts.map((post) => (
-        <div key={post.id} className="postIds">
-          <Link
-            href={`/posts/${post.id}`}
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <div className="postHead">
-              <div className="postCreatedAt">
-                {new Date(post.createdAt).toLocaleDateString("ja-JP")}
+      {posts ? (
+        posts.map((post) => (
+          <div key={post.id} className="postIds p-4 border rounded hover:bg-blue-100">
+            <Link
+              href={`/posts/${post.id}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <div className="postHead">
+                <div className="postCreatedAt">
+                  {new Date(post.createdAt).toLocaleDateString("ja-JP")}
+                </div>
+                <div className="postCategories">
+                  {Array.isArray(post.postCategories)&&post.postCategories &&
+                    post.postCategories.map((post, index) => (
+                      <div key={index} className="postCategory">
+                        {post.category.name}
+                      </div>
+                    ))}
+                </div>
               </div>
-              <div className="postCategories">
-                {post.categories.map((category, index) => (
-                  <div key={index} className="postCategory">
-                    {category.name}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="postTitle">{post.title}</div>
-            <div className="postContent" dangerouslySetInnerHTML={{ __html: post.content }}>
-            </div>
-          </Link>
-        </div>
-      )) : <div>投稿が見つかりません</div>}
+              <div className="postTitle">{post.title}</div>
+              <div
+                className="postContent"
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              ></div>
+            </Link>
+          </div>
+        ))
+      ) : (
+        <div>投稿が見つかりません</div>
+      )}
     </div>
   );
 };
