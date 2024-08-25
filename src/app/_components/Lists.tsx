@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Post } from "@/types/post";
-import { Category } from "@/types/Category";
 
 export const Lists = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -31,9 +30,10 @@ export const Lists = () => {
     fetcher();
   }, []);
 
+  
+  if (!posts) return <div>記事が見つかりません</div>;
   if (loading) return <div>読み込み中</div>;
   if (error) return <div>Error: {error}</div>;
-  if (!posts) return <div>記事が見つかりません</div>;
 
   return (
     <div className="posts">
