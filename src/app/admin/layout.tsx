@@ -2,12 +2,15 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { useRouteGuard } from "../_hooks/useRouteGuard";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  useRouteGuard()
+  
   const pathname = usePathname();
   const isSelected = (href: string) => {
     return pathname.includes(href);
