@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
+import { getCurrentUser } from '@/utils/supabase';
 
 const prisma = new PrismaClient();
 
@@ -9,6 +10,12 @@ export const GET = async (
 ) => {
   //paramsの中にidが入っているので、それを取り出す
   const { id } = params;
+
+  const { error } = await getCurrentUser(request);
+
+  if (error)
+    return NextResponse.json({ status: 'Unauthorized' }, { status: 400 });
+
   try {
     // Postの一覧をDBから取得
     const post = await prisma.post.findUnique({
@@ -30,7 +37,7 @@ export const GET = async (
         },
       },
     });
-    return NextResponse.json({ status: "OK", post }, { status: 200 });
+    return NextResponse.json({ status: 'OK', post }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ status: error.message }, { status: 400 });
@@ -44,10 +51,12 @@ export const PUT = async (
 ) => {
   //paramsの中のidを取り出す
   const { id } = params;
-
+  const { error } = await getCurrentUser(request);
   //リクエストのbodyを取得
   const { title, content, categories, thumbnailUrl } = await request.json();
 
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 });
   try {
     const post = await prisma.post.update({
       where: {
@@ -84,7 +93,10 @@ export const DELETE = async (
 ) => {
   // paramsの中にidが入っているのでそれを取り出す
   const { id } = params;
+  const { error } = await getCurrentUser(request);
 
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 });
   try {
     //idを指定して、Postを削除
     await prisma.post.delete({
@@ -94,7 +106,7 @@ export const DELETE = async (
     });
 
     //レスポンスを返す
-    return NextResponse.json({ status: "ok" }, { status: 200 });
+    return NextResponse.json({ status: 'ok' }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ status: error.message }, { status: 400 });

@@ -1,21 +1,30 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { Post } from "@/types/post";
-import { Category } from "@/types/Category";
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { Post } from '@/types/post';
+import { Category } from '@/types/Category';
+import { headers } from 'next/headers';
+import { useSupabaseSession } from '@/app/_hooks/useSupabaseSession';
 
 export default function Page() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { token } = useSupabaseSession();
 
   useEffect(() => {
     const fetcher = async () => {
+      if (!token) return;
       try {
-        const res = await fetch("/api/admin/categories");
+        const res = await fetch('/api/admin/categories', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: token,
+          },
+        });
         if (!res.ok) {
-          throw new Error("Failed to fetch posts");
+          throw new Error('Failed to fetch posts');
         }
         const { categories } = await res.json();
         setCategories(categories);
@@ -27,7 +36,7 @@ export default function Page() {
     };
 
     fetcher();
-  }, []);
+  }, [token]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

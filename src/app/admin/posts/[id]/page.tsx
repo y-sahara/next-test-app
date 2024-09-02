@@ -1,17 +1,19 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { PostForm } from "../_components/PostForm";
-import { Category } from "@/types/Category";
-import { Post } from "@/types/post";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { PostForm } from '../_components/PostForm';
+import { Category } from '@/types/Category';
+import { Post } from '@/types/post';
+import { useSupabaseSession } from '@/app/_hooks/useSupabaseSession';
 
 export default function Page() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [thumbnailUrl, setThumbnailUrl] = useState('');
   const [categories, setCategories] = useState<Category[]>([]);
   const { id } = useParams();
   const router = useRouter();
+  const { token } = useSupabaseSession();
 
   const handleSubmit = async (e: React.FormEvent) => {
     // フォームのデフォルトの動作をキャンセル
@@ -19,31 +21,41 @@ export default function Page() {
 
     // 記事を作成します。
     await fetch(`/api/admin/posts/${id}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
+        Authorization: token!,
       },
       body: JSON.stringify({ title, content, thumbnailUrl, categories }),
     });
 
-    alert("記事を更新しました。");
+    alert('記事を更新しました。');
   };
 
   const handleDeletePost = async () => {
-    if (!confirm("記事を削除しますか？")) return;
+    if (!confirm('記事を削除しますか？')) return;
 
     await fetch(`/api/admin/posts/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token!,
+      },
     });
 
-    alert("記事を削除しました。");
+    alert('記事を削除しました。');
 
-    router.push("/admin/posts");
+    router.push('/admin/posts');
   };
 
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch(`/api/admin/posts/${id}`);
+      const res = await fetch(`/api/admin/posts/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token!,
+        },
+      });
       const { post }: { post: Post } = await res.json();
       console.log(post);
       setTitle(post.title);
@@ -57,7 +69,7 @@ export default function Page() {
     };
 
     fetcher();
-  }, [id]);
+  }, [id,token]);
 
   return (
     <div className="container mx-auto px-4">

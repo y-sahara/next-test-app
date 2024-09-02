@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
+import { getCurrentUser } from '@/utils/supabase';
 
 const prisma = new PrismaClient();
 
@@ -8,7 +9,9 @@ export const GET = async (
   { params }: { params: { id: string } }
 ) => {
   const { id } = params;
-
+  const { error } = await getCurrentUser(request);
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 });
   try {
     const category = await prisma.category.findUnique({
       where: {
@@ -16,7 +19,7 @@ export const GET = async (
       },
     });
 
-    return NextResponse.json({ status: "OK", category }, { status: 200 });
+    return NextResponse.json({ status: 'OK', category }, { status: 200 });
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ status: error.message }, { status: 400 });
@@ -28,6 +31,9 @@ export const PUT = async (
   { params }: { params: { id: string } }
 ) => {
   const { id } = params;
+  const { error } = await getCurrentUser(request);
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 });
 
   const { name } = await request.json();
 
@@ -40,8 +46,7 @@ export const PUT = async (
         name,
       },
     });
-
-    return NextResponse.json({ status: "OK", category }, { status: 200 });
+    return NextResponse.json({ status: 'OK', category }, { status: 200 });
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ status: error.message }, { status: 400 });
@@ -53,6 +58,9 @@ export const DELETE = async (
   { params }: { params: { id: string } }
 ) => {
   const { id } = params;
+  const { error } = await getCurrentUser(request);
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 });
 
   try {
     await prisma.category.delete({
@@ -61,7 +69,7 @@ export const DELETE = async (
       },
     });
 
-    return NextResponse.json({ status: "ok" }, { status: 200 });
+    return NextResponse.json({ status: 'ok' }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ status: error.message }, { status: 400 });
