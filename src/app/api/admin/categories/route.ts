@@ -5,10 +5,6 @@ import { getCurrentUser } from '@/utils/supabase';
 const prisma = new PrismaClient();
 
 export const GET = async (request: NextRequest) => {
-  const { error } = await getCurrentUser(request);
-
-  if (error)
-    return NextResponse.json({ status: error.message }, { status: 400 });
 
   try {
     const categories = await prisma.category.findMany({

@@ -48,7 +48,7 @@ export default function Page() {
         },
       });
       const { category } = await res.json();
-      setName(category.name);
+      setName(category?.name);
     };
 
     fetcher();

@@ -113,8 +113,10 @@ export default function Contact() {
           </div>
         </div>
         <div className="mb-6">
-          <div className="flex justify-between items-center">
-            <label htmlFor="email">メールアドレス</label>
+          <div className="flex items-center">
+            <label htmlFor="email">メールアドレス
+              
+            </label>
             <input
               type="email"
               id="email"
@@ -131,7 +133,7 @@ export default function Contact() {
           </div>
         </div>
         <div className="mb-6">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center ">
             <label htmlFor="message">本文</label>
             <textarea
               id="message"

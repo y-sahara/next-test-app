@@ -50,26 +50,38 @@ export default function Page() {
 
   useEffect(() => {
     const fetcher = async () => {
+      try{
       const res = await fetch(`/api/admin/posts/${id}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: token!,
         },
       });
-      const { post }: { post: Post } = await res.json();
-      console.log(post);
-      setTitle(post.title);
-      setContent(post.content);
-      setThumbnailUrl(post.thumbnailUrl);
-      setCategories(
-        Array.isArray(post.postCategories)
-          ? post.postCategories.map((pc) => pc.category)
-          : []
-      );
-    };
+      const data  = await res.json();
+      if (data && data.post) {
+        const { post } = data;
+        setTitle(post.title || '');
+        setContent(post.content || '');
+        setThumbnailUrl(post.thumbnailUrl || '');
+        setCategories(
+          Array.isArray(post.postCategories)
+            ? post.postCategories.map((pc:{category:Category}) => pc.category)
+            : []
+        );
+      } else {
+        console.error('投稿データが見つかりません');
+        // エラー状態を設定するか、ユーザーに通知する
+      }
+    } catch (error) {
+      console.error('投稿の取得中にエラーが発生しました:', error);
+      // エラー状態を設定するか、ユーザーに通知する
+    }
+  };
 
+  if (id && token) {
     fetcher();
-  }, [id,token]);
+  }
+}, [id, token]);
 
   return (
     <div className="container mx-auto px-4">

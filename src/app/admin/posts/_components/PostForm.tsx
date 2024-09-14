@@ -1,19 +1,19 @@
-import { Category } from '@/types/Category'
-import React from 'react'
-import { CategoriesSelect } from './CategoriesSelect'
+import { Category } from '@/types/Category';
+import React from 'react';
+import { CategoriesSelect } from './CategoriesSelect';
 
 interface Props {
-  mode: 'new' | 'edit'
-  title: string
-  setTitle: (title: string) => void
-  content: string
-  setContent: (content: string) => void
-  thumbnailUrl: string
-  setThumbnailUrl: (thumbnailUrl: string) => void
-  categories: Category[]
-  setCategories: (categories: Category[]) => void
-  onSubmit: (e: React.FormEvent) => void
-  onDelete?: () => void
+  mode: 'new' | 'edit';
+  title: string;
+  setTitle: (title: string) => void;
+  content: string;
+  setContent: (content: string) => void;
+  thumbnailUrl: string;
+  setThumbnailUrl: (thumbnailUrl: string) => void;
+  categories: Category[];
+  setCategories: (categories: Category[]) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  onDelete?: () => void;
 }
 
 export const PostForm: React.FC<Props> = ({
@@ -103,5 +103,5 @@ export const PostForm: React.FC<Props> = ({
         </button>
       )}
     </form>
-  )
-}
+  );
+};

@@ -1,18 +1,27 @@
 import * as React from 'react';
-import { Box, OutlinedInput, MenuItem, FormControl, Select, Chip } from '@mui/material';
+import {
+  Box,
+  OutlinedInput,
+  MenuItem,
+  FormControl,
+  Select,
+  Chip,
+  CircularProgress,
+} from '@mui/material';
 import { Category } from '@/types/Category';
 import { useEffect } from 'react';
 
 interface Props {
   selectedCategories: Category[];
-  setSelectedCategories: (categories: Category[]) => void
+  setSelectedCategories: (categories: Category[]) => void;
 }
 
 export const CategoriesSelect: React.FC<Props> = ({
   selectedCategories,
   setSelectedCategories,
 }) => {
-  const [categories, setCategories] = React.useState<Category[]>([])
+  const [categories, setCategories] = React.useState<Category[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
   const handleChange = (value: number[]) => {
     value.forEach((v: number) => {
@@ -28,38 +37,38 @@ export const CategoriesSelect: React.FC<Props> = ({
     })
   }
 
+
   useEffect(() => {
     const fetcher = async () => {
       const res = await fetch('/api/admin/categories')
       const { categories } = await res.json()
       setCategories(categories)
+      console.log(categories);
     }
-
     fetcher()
   }, [])
-
 
   return (
     <FormControl className="w-full">
       <Select
         multiple
-        value={selectedCategories}
-        onChange={(e) => handleChange((e.target.value as unknown) as number[])}
+        value={selectedCategories.map((c) => c.id)}
+        onChange={(e) => handleChange(e.target.value as unknown as number[])}
         input={<OutlinedInput />}
         renderValue={(selected: Category[]) => (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-            {selected.map((value: Category) => (
+            {selectedCategories.map((value: Category) => (
               <Chip key={value.id} label={value.name} />
             ))}
           </Box>
         )}
       >
-        {categories.map((category) => (
+        {categories?.map((category) => (
           <MenuItem key={category.id} value={category.id}>
             {category.name}
           </MenuItem>
         ))}
       </Select>
-    </FormControl >
-  )
-}
+    </FormControl>
+  );
+};
