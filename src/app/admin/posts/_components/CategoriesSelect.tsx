@@ -37,7 +37,6 @@ export const CategoriesSelect: React.FC<Props> = ({
     })
   }
 
-
   useEffect(() => {
     const fetcher = async () => {
       const res = await fetch('/api/admin/categories')
