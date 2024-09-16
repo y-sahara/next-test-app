@@ -3,13 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { PostForm } from '../_components/PostForm';
 import { Category } from '@/types/Category';
-import { Post } from '@/types/post';
 import { useSupabaseSession } from '@/app/_hooks/useSupabaseSession';
 
 export default function Page() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [thumbnailUrl, setThumbnailUrl] = useState('');
+  const [thumbnailImageKey, setThumbnailImageKey] = useState('');
   const [categories, setCategories] = useState<Category[]>([]);
   const { id } = useParams();
   const router = useRouter();
@@ -26,10 +25,12 @@ export default function Page() {
         'Content-Type': 'application/json',
         Authorization: token!,
       },
-      body: JSON.stringify({ title, content, thumbnailUrl, categories }),
+      body: JSON.stringify({ title, content, thumbnailImageKey, categories }),
     });
 
     alert('記事を更新しました。');
+
+    router.push('/admin/posts');
   };
 
   const handleDeletePost = async () => {
@@ -62,7 +63,7 @@ export default function Page() {
         const { post } = data;
         setTitle(post.title || '');
         setContent(post.content || '');
-        setThumbnailUrl(post.thumbnailUrl || '');
+        setThumbnailImageKey(post.thumbnailImageKey);
         setCategories(
           Array.isArray(post.postCategories)
             ? post.postCategories.map((pc:{category:Category}) => pc.category)
@@ -85,8 +86,8 @@ export default function Page() {
 
   return (
     <div className="container mx-auto px-4">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-4">記事編集</h1>
+      <div className="mb-4">
+        <h1 className="text-2xl font-bold mb-2">記事編集</h1>
       </div>
 
       <PostForm
@@ -95,8 +96,8 @@ export default function Page() {
         setTitle={setTitle}
         content={content}
         setContent={setContent}
-        thumbnailUrl={thumbnailUrl}
-        setThumbnailUrl={setThumbnailUrl}
+        thumbnailImageKey={thumbnailImageKey}
+        setThumbnailImageKey={setThumbnailImageKey}
         categories={categories}
         setCategories={setCategories}
         onSubmit={handleSubmit}

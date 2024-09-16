@@ -54,7 +54,7 @@ export const CategoriesSelect: React.FC<Props> = ({
         value={selectedCategories.map((c) => c.id)}
         onChange={(e) => handleChange(e.target.value as unknown as number[])}
         input={<OutlinedInput />}
-        renderValue={(selected: Category[]) => (
+        renderValue={(selected) => (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
             {selectedCategories.map((value: Category) => (
               <Chip key={value.id} label={value.name} />

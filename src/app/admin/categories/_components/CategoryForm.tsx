@@ -16,14 +16,14 @@ export const CategoryForm: React.FC<Props> = ({
   onDelete,
 }) => {
   return (
-    <div className="max-w-md mx-auto"> 
+    <div className="max-w-md"> 
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
         <label
           htmlFor="title"
           className="block text-sm font-medium text-gray-700"
         >
-          カテゴリー名
+          カテゴリ名
         </label>
         <input
           type="text"

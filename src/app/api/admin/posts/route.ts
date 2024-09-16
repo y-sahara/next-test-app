@@ -55,14 +55,14 @@ export const POST = async (request: NextRequest, context: any) => {
     //リクエストのbodyを作成
     const body = await request.json();
 
-    const { title, content, categories, thumbnailUrl } = body;
+    const { title, content, categories, thumbnailImageKey } = body;
 
     //投稿をDBに生成
     const data = await prisma.post.create({
       data: {
         title,
         content,
-        thumbnailUrl,
+        thumbnailImageKey,
       },
     });
 

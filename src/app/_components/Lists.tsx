@@ -36,30 +36,30 @@ export const Lists = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="posts">
+    <div className="pt-[74px]">
       {posts ? (
         posts.map((post) => (
-          <div key={post.id} className="postIds p-4 border rounded hover:bg-blue-100">
+          <div key={post.id} className="mx-60 my-12 border-4 p-4 rounded-3xl hover:bg-blue-100">
             <Link
               href={`/posts/${post.id}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              <div className="postHead">
+              <div className="flex justify-between  mb-2">
                 <div className="postCreatedAt">
                   {new Date(post.createdAt).toLocaleDateString("ja-JP")}
                 </div>
                 <div className="postCategories">
                   {Array.isArray(post.postCategories)&&post.postCategories &&
                     post.postCategories.map((post, index) => (
-                      <div key={index} className="postCategory">
+                      <div key={index} className="inline-block bg-blue-200 rounded-full px-2 py-1 text-xs font-semibold">
                         {post.category.name}
                       </div>
                     ))}
                 </div>
               </div>
-              <div className="postTitle">{post.title}</div>
+              <div className="text-2xl font-bold mb-4">{post.title}</div>
               <div
-                className="postContent"
+                className="mt-6 mb-6"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               ></div>
             </Link>

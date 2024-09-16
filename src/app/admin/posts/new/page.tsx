@@ -9,8 +9,8 @@ import { useSupabaseSession } from '@/app/_hooks/useSupabaseSession'
 export default function Page() {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-  const [thumbnailUrl, setThumbnailUrl] = useState(
-    'https://placehold.jp/800x400.png',
+  const [thumbnailImageKey, setThumbnailImageKey] = useState(
+    '',
   ) 
   const [categories, setCategories] = useState<Category[]>([])
   const router = useRouter()
@@ -25,15 +25,17 @@ export default function Page() {
         'Content-Type': 'application/json',
         Authorization:token!,
       },
-      body: JSON.stringify({ title, content, thumbnailUrl, categories }),
+      body: JSON.stringify({ title, content, thumbnailImageKey, categories }),
     })
 
     const { id } = await res.json()
 
-    // 作成した記事の詳細ページに遷移します。
-    router.push(`/admin/posts/${id}`)
 
     alert('記事を作成しました。')
+
+    // 記事一覧ページへの遷移
+    router.push(`/admin/posts/`)
+
   }
 
   return (
@@ -48,8 +50,8 @@ export default function Page() {
         setTitle={setTitle}
         content={content}
         setContent={setContent}
-        thumbnailUrl={thumbnailUrl}
-        setThumbnailUrl={setThumbnailUrl}
+        thumbnailImageKey={thumbnailImageKey}
+        setThumbnailImageKey={setThumbnailImageKey}
         categories={categories}
         setCategories={setCategories}
         onSubmit={handleSubmit}

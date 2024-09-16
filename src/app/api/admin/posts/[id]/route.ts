@@ -53,7 +53,7 @@ export const PUT = async (
   const { id } = params;
   const { error } = await getCurrentUser(request);
   //リクエストのbodyを取得
-  const { title, content, categories, thumbnailUrl } = await request.json();
+  const { title, content, categories, thumbnailImageKey } = await request.json();
 
   if (error)
     return NextResponse.json({ status: error.message }, { status: 400 });
@@ -65,7 +65,7 @@ export const PUT = async (
       data: {
         title,
         content,
-        thumbnailUrl,
+        thumbnailImageKey,
       },
     });
 
