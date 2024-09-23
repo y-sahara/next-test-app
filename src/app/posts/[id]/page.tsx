@@ -21,7 +21,7 @@ export default function Page() {
         if (!res.ok) {
           throw new Error('Failed to fetch posts');
         }
-        const { post } = await res.json();
+        const {post}:{post:Post} = await res.json();
         setPosts(post);
         console.log(post);
         // setPosts(posts.find((p: Post) => p.id.toString() === id) || null);

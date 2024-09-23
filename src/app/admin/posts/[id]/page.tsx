@@ -70,9 +70,8 @@ export default function Page() {
           },
         });
 
-        const data = await res.json();
-        if (data && data.post) {
-          const { post }: { post: Post } = data;
+        const {post} : {post:Post} = await res.json();
+        if (post) {
           setTitle(post.title || '');
           setContent(post.content || '');
           setThumbnailImageKey(post.thumbnailImageKey);
