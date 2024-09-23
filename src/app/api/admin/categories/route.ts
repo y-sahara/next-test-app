@@ -5,6 +5,10 @@ import { getCurrentUser } from '@/utils/supabase';
 const prisma = new PrismaClient();
 
 export const GET = async (request: NextRequest) => {
+  const { error } = await getCurrentUser(request);
+
+  if (error)
+    return NextResponse.json({ status: 'Unauthorized' }, { status: 400 });
 
   try {
     const categories = await prisma.category.findMany({
@@ -21,10 +25,10 @@ export const GET = async (request: NextRequest) => {
 };
 
 export const POST = async (request: NextRequest, context: any) => {
-  
-  const { currentUser, error } = await getCurrentUser(request);
+  const { error } = await getCurrentUser(request);
   if (error)
     return NextResponse.json({ status: error.message }, { status: 400 });
+
   try {
     const body = await request.json();
 
