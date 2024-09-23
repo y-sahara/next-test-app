@@ -13,6 +13,7 @@ export default function Page() {
   const [error, setError] = useState(null);
   const { token } = useSupabaseSession();
 
+  //データの取得
   useEffect(() => {
     const fetcher = async () => {
       if (!token) return;
@@ -23,8 +24,9 @@ export default function Page() {
             Authorization: token,
           },
         });
+        
         if (!res.ok) {
-          throw new Error('Failed to fetch posts');
+          throw new Error('カテゴリの取得に失敗しました。時間をおいて再度お試しください。');
         }
         const { categories } = await res.json();
         setCategories(categories);
@@ -40,6 +42,7 @@ export default function Page() {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+  
   return (
     <div className="">
       <div className="flex justify-between items-center mb-4">
