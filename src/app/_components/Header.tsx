@@ -1,14 +1,16 @@
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import { useSupabaseSession } from "../_hooks/useSupabaseSession";
-import { supabase } from "@/utils/supabase";
+import React from 'react';
+import Link from 'next/link';
+import { useSupabaseSession } from '../_hooks/useSupabaseSession';
+import { supabase } from '@/utils/supabase';
+import { useRouter } from 'next/navigation';
 
 export const Header: React.FC = () => {
+  const router = useRouter();
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.href = "/";
+    router.replace('/');
   };
   const { session, isLoading } = useSupabaseSession();
 
@@ -39,5 +41,5 @@ export const Header: React.FC = () => {
         </div>
       )}
     </header>
-  )
-}
+  );
+};
