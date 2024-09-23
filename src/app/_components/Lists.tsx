@@ -37,8 +37,8 @@ export const Lists = () => {
 
   return (
     <div className="pt-[74px]">
-      {posts ? (
-        posts.map((post) => (
+      { !posts && <div>投稿が見つかりません</div> }
+        {posts.map((post) => (
           <div key={post.id} className="mx-60 my-12 border-4 p-4 rounded-3xl hover:bg-blue-100">
             <Link
               href={`/posts/${post.id}`}
@@ -65,9 +65,7 @@ export const Lists = () => {
             </Link>
           </div>
         ))
-      ) : (
-        <div>投稿が見つかりません</div>
-      )}
+      }
     </div>
   );
 };
