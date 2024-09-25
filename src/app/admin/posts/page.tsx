@@ -1,42 +1,53 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { Post } from "@/types/post";
-import Link from "next/link";
+import React, { useEffect, useState } from 'react';
+import { Post } from '@/types/post';
+import Link from 'next/link';
+import { useSupabaseSession } from '@/app/_hooks/useSupabaseSession';
 
 export default function Page() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { token } = useSupabaseSession();
 
   useEffect(() => {
+    if (!token) return;
+
+    //データ取得
     const fetcher = async () => {
       try {
-        const res = await fetch("/api/admin/posts");
-        if (!res.ok) {
-          throw new Error("Failed to fetch posts");
-        }
-        const { posts } = await res.json();
+        const res = await fetch('/api/admin/posts', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: token, //認証にトークンを使用。
+          },
+        });
 
-        setPosts(posts);
-      } catch (error: any) {
-        setError(error.massage);
+        if (!res.ok) {
+          if (res.status === 400) {
+            throw new Error('Unauthorized');
+          }
+          throw new Error('Failed to fetch posts');
+        }
+
+        const { posts }: { posts: Post[] } = await res.json();
+        setPosts([...posts]);
+      } catch (error) {
+        alert('データの取得に失敗しました。時間を空けて再度お試しください。');
       } finally {
         setLoading(false);
       }
     };
 
     fetcher();
-  }, []);
+  }, [token]);
 
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
   if (!posts) return <div>記事が見つかりません</div>;
-  
+  if (loading) return <div>Loading...</div>;
+
   return (
     <div className="">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-bold">記事一覧</h1>
         <button className="bg-blue-500 text-white p-2 rounded">
           <Link href="/admin/posts/new">新規作成</Link>

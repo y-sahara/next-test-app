@@ -1,32 +1,34 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { CategoryForm } from "../_components/CategoryForm";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { CategoryForm } from '../_components/CategoryForm';
+import { useSupabaseSession } from '@/app/_hooks/useSupabaseSession';
+import { Post } from '@/types/post';
 
 export default function Page() {
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const router = useRouter();
+  const { token } = useSupabaseSession();
 
+  //新規カテゴリ作成
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); //デフォルト動作をキャンセル。
+    try {
+      await fetch('/api/admin/categories', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token!,
+        },
+        body: JSON.stringify({ name }),
+      });
 
-    //
-    const res = await fetch("/api/admin/categories", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name }),
-    });
-
-    const { id } = await res.json();
-
-    // 作成したカテゴリーの詳細ページに遷移します。
-    router.push(`/admin/categories/${id}`);
-
-    alert("カテゴリーを作成しました。");
-    router.push("/admin/categories");
+      alert('カテゴリーを作成しました。');
+      router.push('/admin/categories');
+    } catch (error) {
+      alert('カテゴリーの作成に失敗しました。もう一度お試しください。');
+    }
   };
 
   return (

@@ -1,37 +1,40 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { PostForm } from '../_components/PostForm'
-import { Category } from '@/types/Category'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { PostForm } from '../_components/PostForm';
+import { Category } from '@/types/Category';
+import { useSupabaseSession } from '@/app/_hooks/useSupabaseSession';
 
 export default function Page() {
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [thumbnailUrl, setThumbnailUrl] = useState(
-    'https://placehold.jp/800x400.png',
-  ) 
-  const [categories, setCategories] = useState<Category[]>([])
-  const router = useRouter()
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [thumbnailImageKey, setThumbnailImageKey] = useState('');
+  const [categories, setCategories] = useState<Category[]>([]);
+  const router = useRouter();
+  const { token } = useSupabaseSession();
 
+  // 記事の作成
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const res = await fetch('/api/admin/posts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ title, content, thumbnailUrl, categories }),
-    })
+    try {
+      await fetch('/api/admin/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token!,
+        },
+        body: JSON.stringify({ title, content, thumbnailImageKey, categories }),
+      });
+      alert('記事を作成しました。');
+      // 記事一覧ページへの遷移
+      router.push(`/admin/posts/`);
 
-    const { id } = await res.json()
-
-    // 作成した記事の詳細ページに遷移します。
-    router.push(`/admin/posts/${id}`)
-
-    alert('記事を作成しました。')
-  }
+    } catch (error) {
+      alert('記事の作成に失敗しました。もう一度お試しください。');
+    }
+  };
 
   return (
     <div className="container mx-auto px-4">
@@ -45,12 +48,12 @@ export default function Page() {
         setTitle={setTitle}
         content={content}
         setContent={setContent}
-        thumbnailUrl={thumbnailUrl}
-        setThumbnailUrl={setThumbnailUrl}
+        thumbnailImageKey={thumbnailImageKey}
+        setThumbnailImageKey={setThumbnailImageKey}
         categories={categories}
         setCategories={setCategories}
         onSubmit={handleSubmit}
       />
     </div>
-  )
+  );
 }

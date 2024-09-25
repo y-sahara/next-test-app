@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Post } from "@/types/post";
-import { Category } from "@/types/Category";
 
 export const Lists = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -31,43 +30,42 @@ export const Lists = () => {
     fetcher();
   }, []);
 
+  
+  if (!posts) return <div>記事が見つかりません</div>;
   if (loading) return <div>読み込み中</div>;
   if (error) return <div>Error: {error}</div>;
-  if (!posts) return <div>記事が見つかりません</div>;
 
   return (
-    <div className="posts">
-      {posts ? (
-        posts.map((post) => (
-          <div key={post.id} className="postIds p-4 border rounded hover:bg-blue-100">
+    <div className="pt-[74px]">
+      { !posts && <div>投稿が見つかりません</div> }
+        {posts.map((post) => (
+          <div key={post.id} className="mx-60 my-12 border-4 p-4 rounded-3xl hover:bg-blue-100">
             <Link
               href={`/posts/${post.id}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              <div className="postHead">
+              <div className="flex justify-between  mb-2">
                 <div className="postCreatedAt">
                   {new Date(post.createdAt).toLocaleDateString("ja-JP")}
                 </div>
                 <div className="postCategories">
                   {Array.isArray(post.postCategories)&&post.postCategories &&
                     post.postCategories.map((post, index) => (
-                      <div key={index} className="postCategory">
+                      <div key={index} className="inline-block bg-blue-200 rounded-full px-2 py-1 text-xs font-semibold">
                         {post.category.name}
                       </div>
                     ))}
                 </div>
               </div>
-              <div className="postTitle">{post.title}</div>
+              <div className="text-2xl font-bold mb-4">{post.title}</div>
               <div
-                className="postContent"
+                className="mt-6 mb-6"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               ></div>
             </Link>
           </div>
         ))
-      ) : (
-        <div>投稿が見つかりません</div>
-      )}
+      }
     </div>
   );
 };
