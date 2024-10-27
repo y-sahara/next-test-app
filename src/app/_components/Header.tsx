@@ -34,7 +34,7 @@ export const Header: React.FC = () => {
                 お問い合わせ
               </Link>
               <Link href="/login" className="header-link">
-                ログイン
+                管理者ログイン
               </Link>
             </>
           )}
